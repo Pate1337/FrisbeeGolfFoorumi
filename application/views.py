@@ -1,5 +1,5 @@
-from flask import Flask, render_template
-app = Flask(__name__)
+from flask import render_template
+from application import app
 
 class Item:
     def __init__(self, name):
@@ -22,6 +22,3 @@ def hello():
 @app.route("/demo")
 def content():
     return render_template("demo.html", nimi=nimi, lista=lista, esineet=esineet)
-
-if __name__ == "__main__":
-    app.run(debug=True)

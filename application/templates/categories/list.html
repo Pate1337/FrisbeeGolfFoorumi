@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block body %}
+  <table>
+    <tr>
+      <th>Category</th>
+      <th>Description</th>
+      <th></th>
+    </tr>
+    {% for category in categories %}
+    <tr>
+      <td>{{ category.name }}</td>
+      <td>{{ category.description }}</td>
+      <td>
+        <form method="POST" action="{{ url_for('categories_remove_description', category_id=category.id) }}">
+          <input type="submit" value="Remove description!"/>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

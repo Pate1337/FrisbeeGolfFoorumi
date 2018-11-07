@@ -6,6 +6,10 @@
   </head>
 
   <body>
+      <ul>
+        <li><a href="{{ url_for('categories_index') }}">Categories</a></li>
+        <li><a href="{{ url_for('categories_form') }}">Add a new category</a></li>
+      </ul>
     {% block body %}
     <p>
 Tähän tuodaan sisältö muualta.
