@@ -9,3 +9,5 @@ Omien kokemusten ja suoritusten jakaminen on myös sallittua sivulla.
 ## Documentation
 
 [Tuntikirjanpito](https://github.com/Pate1337/FrisbeeGolfFoorumi/blob/master/documentation/tuntikirjanpito.md)
+
+[Tietokantakaavio](https://github.com/Pate1337/FrisbeeGolfFoorumi/blob/master/documentation/tietokantakaavio.md)
