@@ -4,6 +4,8 @@ Sivulla käyttäjät voivat keskustella frisbee golffin erilaisista aihealueista
 Lisäksi käyttäjät voivat opettaa toisiaan jakamalla hyväksi kokeneitaan harjoitteita, tekniikoita tai linkkejä.
 Omien kokemusten ja suoritusten jakaminen on myös sallittua sivulla.
 
+## Heroku
+
 [Heroku](https://frisbee-golf-foorumi.herokuapp.com/)
 
 ## Documentation
