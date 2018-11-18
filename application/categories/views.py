@@ -1,16 +1,21 @@
-from application import app, db
 from flask import redirect, render_template, request, url_for
-from application.database.models import Category
+from flask_login import login_required, current_user
+
+from application import app, db
+from application.categories.models import Category
+from application.categories.forms import CategoryForm
 
 @app.route("/categories", methods=["GET"])
 def categories_index():
     return render_template("categories/list.html", categories = Category.query.all())
 
 @app.route("/categories/new/")
+@login_required
 def categories_form():
-    return render_template("categories/new.html")
+    return render_template("categories/new.html", form = CategoryForm())
 
 @app.route("/categories/<category_id>/", methods=["POST"])
+@login_required
 def categories_remove_description(category_id):
 
     c = Category.query.get(category_id)
@@ -20,8 +25,15 @@ def categories_remove_description(category_id):
     return redirect(url_for("categories_index"))
 
 @app.route("/categories/", methods=["POST"])
+@login_required
 def categories_create():
-    c = Category(request.form.get("name"), request.form.get("description"))
+    form = CategoryForm(request.form)
+
+    if not form.validate():
+      return render_template("categories/new.html", form = form)
+    
+    c = Category(form.name.data, form.description.data)
+    c.account_id = current_user.id
 
     db.session().add(c)
     db.session().commit()

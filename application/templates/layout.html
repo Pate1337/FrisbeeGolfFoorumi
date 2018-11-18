@@ -6,13 +6,20 @@
   </head>
 
   <body>
+      {% if current_user.is_authenticated %}
+      <p>
+	      Kirjautunut nimellä {{ current_user.name }}. <a href="{{ url_for('auth_logout') }}">Kirjaudu ulos</a>
+      </p>
+      {% else %}
+      <a href="{{ url_for('auth_login') }}">Kirjaudu</a> tai <a href="{{ url_for('auth_register') }}">Rekisteröidy</a>
+      {% endif %}
       <ul>
         <li><a href="{{ url_for('categories_index') }}">Categories</a></li>
         <li><a href="{{ url_for('categories_form') }}">Add a new category</a></li>
       </ul>
     {% block body %}
     <p>
-Tähän tuodaan sisältö muualta.
+      Tähän tuodaan sisältö muualta.
     </p>
     {% endblock %}
   </body>

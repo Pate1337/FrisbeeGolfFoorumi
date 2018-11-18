@@ -1,0 +1,73 @@
+{% extends "layout.html" %}
+
+{% block body %}
+{{ error }}
+<form method="POST" action="{{ url_for('auth_register') }}">
+  <table>
+    <tr>
+      <td>
+	      {{ form.username.label }}
+      </td>
+      <td>
+	      {{ form.username }}
+      </td>
+      <td>
+        <ul>
+          {% for error in form.username.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>
+	      {{ form.password.label }}
+      </td>
+      <td>
+	      {{ form.password }}
+      </td>
+      <td>
+        <ul>
+          {% for error in form.password.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>
+	      {{ form.confirm.label }}
+      </td>
+      <td>
+	      {{ form.confirm }}
+      </td>
+      <td>
+        <ul>
+          {% for error in form.confirm.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td>
+	      {{ form.name.label }}
+      </td>
+      <td>
+	      {{ form.name }}
+      </td>
+      <td>
+        <ul>
+          {% for error in form.name.errors %}
+          <li>{{ error }}</li>
+          {% endfor %}
+        </ul>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3">
+	      <input type="submit" value="Rekisteröidy"/>
+      </td>
+    </tr>
+</form>
+{% endblock %}
