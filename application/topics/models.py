@@ -1,15 +1,14 @@
 from application import db
 from application.models import Base
 
-class Category(Base):
+class Topic(Base):
 
     name = db.Column(db.String(144), nullable=False)
-    description = db.Column(db.String(1000), nullable=False)
 
     account_id = db.Column(db.Integer, db.ForeignKey('account.id'),
                            nullable=False)
-    topics = db.relationship("Topic", backref='category_topic', lazy=True)
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
 
-    def __init__(self, name, description):
+    def __init__(self, name):
         self.name = name
-        self.description = description
+    
