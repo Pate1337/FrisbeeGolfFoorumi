@@ -3,14 +3,12 @@ from flask_login import login_required, current_user
 
 from application import app, db
 from application.topics.models import Topic
-from application.categories.models import Category
 from application.topics.forms import TopicForm
 
 @app.route("/categories/<category_id>/topics/", methods=["GET"])
 def topics_index(category_id):
-    # Tässä tarttee hakea vaan categoryn id:n perusteella Topics
-    # Categorylle on määritelty relationship topicseihein Modeleissa
-    category_topics = Category.query.get(category_id).topics
+    category_topics = Topic.find_topics_for_category_with_users(category_id)
+    # will be form { topic: { name: '', id: '' }, account: { username: '', id: '' } }
     return render_template("topics/list.html", topics = category_topics, category_id = category_id)
 
 @app.route("/categories/<category_id>/topics/new/")
