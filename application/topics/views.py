@@ -3,13 +3,16 @@ from flask_login import login_required, current_user
 
 from application import app, db
 from application.topics.models import Topic
+from application.categories.models import Category
 from application.topics.forms import TopicForm
 
 @app.route("/categories/<category_id>/topics/", methods=["GET"])
 def topics_index(category_id):
+    # Search the category by id
+    c = Category.query.get(category_id)
     category_topics = Topic.find_topics_for_category_with_users(category_id)
     # will be form { topic: { name: '', id: '' }, account: { username: '', id: '' } }
-    return render_template("topics/list.html", topics = category_topics, category_id = category_id)
+    return render_template("topics/list.html", topics = category_topics, category = c)
 
 @app.route("/categories/<category_id>/topics/new/")
 @login_required

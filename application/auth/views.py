@@ -1,5 +1,5 @@
 from flask import render_template, request, redirect, url_for
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, current_user
 
 from application import app, db
 from application.auth.models import User
@@ -50,3 +50,15 @@ def auth_register():
     db.session().commit()
     
     return redirect(url_for("auth_login"))
+
+@app.route("/profile/<account_id>", methods = ["GET"])
+def profile_show(account_id):
+    if not current_user.is_authenticated:
+        user = User.query.get(account_id)
+        return render_template("auth/show.html", user = user, own_profile = False)
+
+    if str(current_user.id) == str(account_id):
+        return render_template("auth/show.html", user = current_user, own_profile = True)
+
+    user = User.query.get(account_id)
+    return render_template("auth/show.html", user = user, own_profile = False)
