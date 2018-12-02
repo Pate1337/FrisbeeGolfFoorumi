@@ -4,6 +4,7 @@ from flask_login import login_required, current_user
 from application import app, db
 from application.messages.models import Message
 from application.topics.models import Topic
+from application.categories.models import Category
 from application.messages.forms import MessageForm
 
 @app.route("/topics/<topic_id>/messages", methods=["GET"])
@@ -11,9 +12,10 @@ def messages_index(topic_id):
     # These could be done in one query
     # Search the topic by id
     t = Topic.query.get(topic_id)
+    c = Category.query.get(t.category_id)
     topic_messages = Message.find_messages_for_topic_with_users(topic_id)
     # will be form { message: { message: '', id: '' }, account: { username: '', id: '' } }
-    return render_template("messages/list.html", messages = topic_messages, topic = t)
+    return render_template("messages/list.html", messages = topic_messages, topic = t, category = c)
 
 @app.route("/topics/<topic_id>/messages/new/")
 @login_required

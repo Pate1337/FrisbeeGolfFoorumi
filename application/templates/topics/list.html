@@ -6,8 +6,10 @@
       <tr>
         <th scope="col">
           <div style="display:flex;justify-content:space-between;">
-            <div>{{ category.name }}</div>
+            <div><a href="{{ url_for('categories_index') }}">Categories</a> / {{ category.name }}</div>
+            {% if current_user.is_authenticated %}
             <div><a href="{{ url_for('topics_form', category_id=category.id) }}">Add a new topic</a></div>
+            {% endif %}
           </div>
         </th>
         <th scope="col">Latest message</th>
