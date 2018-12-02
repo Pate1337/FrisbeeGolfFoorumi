@@ -9,6 +9,7 @@ class Topic(Base):
     account_id = db.Column(db.Integer, db.ForeignKey('account.id'),
                            nullable=False)
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
+    messages = db.relationship("Message", backref='topic_message', lazy=True)
 
     def __init__(self, name):
         self.name = name

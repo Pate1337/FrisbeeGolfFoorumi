@@ -26,6 +26,8 @@ from application.topics import models
 from application.topics import views
 from application.auth import models
 from application.auth import views
+from application.messages import models
+from application.messages import views
 
 # kirjautuminen
 from application.auth.models import User
