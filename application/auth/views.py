@@ -49,7 +49,9 @@ def auth_register():
     db.session().add(u)
     db.session().commit()
     
-    return redirect(url_for("auth_login"))
+    # Login straight away
+    login_user(u)
+    return redirect(url_for("categories_index"))
 
 @app.route("/profile/<account_id>", methods = ["GET"])
 def profile_show(account_id):
