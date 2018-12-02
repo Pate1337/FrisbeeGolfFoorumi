@@ -14,12 +14,13 @@ class Message(Base):
   
   @staticmethod
   def find_messages_for_topic_with_users(topic_id):
-    stmt = text("SELECT message.message, message.id AS message_id, account.username, account.id AS account_id FROM message, account"
-                     " WHERE (topic_id = :topic_id AND message.account_id = account.id)").params(topic_id = topic_id)
+    stmt = text("SELECT message.message, message.id AS message_id, message.date_created, account.username, account.id AS account_id FROM message, account"
+                     " WHERE (topic_id = :topic_id AND message.account_id = account.id)"
+                     " ORDER BY message.date_created DESC").params(topic_id = topic_id)
     res = db.engine.execute(stmt)
 
     response = []
     for row in res:
-        response.append({"message":{ "message": row[0], "id": row[1] }, "account": { "username": row[2], "id": row[3] }})
+        response.append({"message":{ "message": row[0], "id": row[1], "created": row[2] }, "account": { "username": row[3], "id": row[4] }})
 
     return response

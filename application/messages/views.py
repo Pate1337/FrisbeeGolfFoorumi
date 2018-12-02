@@ -8,8 +8,7 @@ from application.messages.forms import MessageForm
 
 @app.route("/topics/<topic_id>/messages", methods=["GET"])
 def messages_index(topic_id):
-    # Haetaan topicin messaget ja yhdistetään käyttäjät
-
+    # These could be done in one query
     # Search the topic by id
     t = Topic.query.get(topic_id)
     topic_messages = Message.find_messages_for_topic_with_users(topic_id)

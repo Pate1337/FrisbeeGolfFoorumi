@@ -16,12 +16,18 @@ class Topic(Base):
     
     @staticmethod
     def find_topics_for_category_with_users(category_id):
-        stmt = text("SELECT topic.name, topic.id AS topic_id, account.username, account.id AS account_id FROM topic, account"
-                     " WHERE (category_id = :category_id AND topic.account_id = account.id)").params(category_id = category_id)
+        stmt = text("SELECT topic.name, topic.id AS topic_id, account.username, account.id AS account_id, messages.date_created AS latest FROM topic, account"
+                     " LEFT JOIN (SELECT * FROM message ORDER BY date_created ASC) AS messages"
+                     " ON messages.topic_id = topic.id"
+                     " WHERE category_id = :category_id AND topic.account_id = account.id"
+                     " GROUP BY topic.id ORDER BY latest DESC").params(category_id = category_id)
         res = db.engine.execute(stmt)
 
         response = []
         for row in res:
-            response.append({"topic":{ "name": row[0], "id": row[1] }, "account": { "username": row[2], "id": row[3] }})
+            latest_message = ''
+            if row[4]:
+                latest_message = row[4]
+            response.append({"topic":{ "name": row[0], "id": row[1], "latest_message": latest_message }, "account": { "username": row[2], "id": row[3] }})
 
         return response

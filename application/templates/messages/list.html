@@ -10,16 +10,20 @@
             <div><a href="{{ url_for('messages_form', topic_id=topic.id) }}">Add a new message</a></div>
           </div>
         </th>
-        <th scope="col">User</th>
       </tr>
     </thead>
-    <tbody>
-      {% for message in messages %}
-      <tr>
-        <th scope="row">{{ message.message.message }}</th>
-        <td><a href="{{ url_for('profile_show', account_id=message.account.id) }}">{{ message.account.username }}</a></td>
-      </tr>
-      {% endfor %}
-    </tbody>
   </table>
+
+
+  {% for message in messages %}
+  <div class="card bg-light" style="margin-bottom:10px">
+    <div class="card-header" style="display:flex;justify-content:space-between;">
+      <a href="{{ url_for('profile_show', account_id=message.account.id) }}">{{ message.account.username }}</a>
+      {{ message.message.created }}
+    </div>
+    <div class="card-body">
+      <p class="card-text">{{ message.message.message }}</p>
+    </div>
+  </div>
+  {% endfor %}
 {% endblock %}
