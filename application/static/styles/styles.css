@@ -1,3 +1,4 @@
-.table-row {
-  cursor: pointer;
+.white-link {
+  color: green !important;
+  background-color: white !important;
 }

@@ -6,9 +6,9 @@
       <tr>
         <th scope="col" style="width:60%">
           <div style="display:flex;justify-content:space-between;">
-            <div><a href="{{ url_for('categories_index') }}">Categories</a> / {{ category.name }}</div>
+            <div style="width:70%;overflow-wrap:break-word"><a style="color:white" href="{{ url_for('categories_index') }}">Categories</a> / {{ category.name }}</div>
             {% if current_user.is_authenticated %}
-            <div><a href="{{ url_for('topics_form', category_id=category.id) }}">Add a new topic</a></div>
+            <div style="width:25%;overflow-wrap:break-word"><a href="{{ url_for('topics_form', category_id=category.id) }}">Add a new topic</a></div>
             {% endif %}
           </div>
         </th>
