@@ -16,7 +16,7 @@ class Topic(Base):
     
     @staticmethod
     def find_topics_for_category_with_users(category_id):
-        stmt = text("SELECT topic.name, topic.id AS topic_id, account.username, account.id AS account_id, messages.maxDate AS latest FROM topic, account"
+        stmt = text("SELECT topic.name, topic.id, account.username, account.id AS account_id, messages.maxDate AS latest FROM topic, account"
                      " LEFT JOIN (SELECT topic_id, max(date_created) AS maxDate FROM message GROUP BY topic_id) messages"
                      " ON messages.topic_id = topic.id"
                      " WHERE category_id = :category_id AND topic.account_id = account.id"
@@ -54,4 +54,4 @@ class Topic(Base):
 #    group by username
 #) tm on t.username = tm.username and t.date = tm.MaxDate
 
-# SELECT topic.name, topic.id AS topic_id, account.username, account.id AS account_id, messages.maxDate AS latest FROM topic, account LEFT JOIN (SELECT topic_id, max(date_created) AS maxDate FROM message GROUP BY topic_id) messages ON messages.topic_id = topic.id WHERE category_id = 2 AND topic.account_id = account.id ORDER BY latest DESC
+# SELECT topic.name, topic.id, account.username, account.id AS account_id, messages.maxDate AS latest FROM topic, account LEFT JOIN (SELECT topic_id, max(date_created) AS maxDate FROM message GROUP BY topic_id) messages ON messages.topic_id = topic.id WHERE category_id = 2 AND topic.account_id = account.id ORDER BY latest DESC
