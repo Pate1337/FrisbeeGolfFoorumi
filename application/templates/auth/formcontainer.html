@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div style="display:flex;justify-content:center;align-items:center;">
+  <div class="card bg-light" style="padding:20px;width:80%">
+    {% block content %}
+    <p>
+      Tähän tuodaan sisältö muualta.
+    </p>
+    {% endblock %}
+  </div>
+</div>
+{% endblock %}
