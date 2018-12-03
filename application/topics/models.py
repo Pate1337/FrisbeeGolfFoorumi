@@ -19,7 +19,8 @@ class Topic(Base):
         stmt = text("SELECT t.topic_name, t.topic_id AS topic_id, t.username, t.topic_by_account AS account_id, m.maxDate AS latest"
                      " FROM (SELECT topic.name AS topic_name, topic.id AS topic_id, account.id AS topic_by_account, account.username AS username FROM topic, account WHERE topic.account_id = account.id AND topic.category_id = :category_id) t"
                      " LEFT JOIN (SELECT topic_id, max(date_created) AS maxDate FROM message GROUP BY topic_id) m"
-                     " ON t.topic_id = m.topic_id ORDER BY latest DESC").params(category_id = category_id)
+                     " ON t.topic_id = m.topic_id"
+                     " ORDER BY CASE WHEN m.maxDate IS NULL THEN 1 ELSE 0 END, m.maxDate DESC").params(category_id = category_id)
         # This would be good for finding the latest by date_modified
         #stmt = text("SELECT topic.name, topic.id AS topic_id, account.username, account.id AS account_id, messages.date_created AS latest FROM topic, account"
         #             " LEFT JOIN (SELECT * FROM message ORDER BY date_created ASC) messages"
