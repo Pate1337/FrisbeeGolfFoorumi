@@ -16,11 +16,10 @@ class Topic(Base):
     
     @staticmethod
     def find_topics_for_category_with_users(category_id):
-        stmt = text("SELECT t.name, t.id, account.username, account.id AS account_id, messages.maxDate AS latest FROM topic t, account"
-                     " LEFT JOIN (SELECT topic_id, max(date_created) AS maxDate FROM message GROUP BY topic_id) messages"
-                     " ON messages.topic_id = t.id"
-                     " WHERE category_id = :category_id AND t.account_id = account.id"
-                     " ORDER BY latest DESC").params(category_id = category_id)
+        stmt = text("SELECT t.topic_name, t.topic_id AS topic_id, t.username, t.topic_by_account AS account_id, m.maxDate AS latest"
+                     " FROM (SELECT topic.name AS topic_name, topic.id AS topic_id, account.id AS topic_by_account, account.username AS username FROM topic, account WHERE topic.account_id = account.id AND topic.category_id = :category_id) t"
+                     " LEFT JOIN (SELECT topic_id, max(date_created) AS maxDate FROM message GROUP BY topic_id) m"
+                     " ON t.topic_id = m.topic_id ORDER BY latest DESC").params(category_id = category_id)
         # This would be good for finding the latest by date_modified
         #stmt = text("SELECT topic.name, topic.id AS topic_id, account.username, account.id AS account_id, messages.date_created AS latest FROM topic, account"
         #             " LEFT JOIN (SELECT * FROM message ORDER BY date_created ASC) messages"
@@ -46,12 +45,6 @@ class Topic(Base):
 
 # SELECT topic.name, topic.id AS topic_id, account.username, account.id AS account_id, messages.date_created AS latest FROM topic, account LEFT JOIN (SELECT * FROM message ORDER BY date_created ASC) messages ON messages.topic_id = topic.id WHERE category_id = 2 AND topic.account_id = account.id GROUP BY topic.id ORDER BY latest DESC
 
-# select t.username, t.date, t.value
-#from MyTable t
-#inner join (
-#    select username, max(date) as MaxDate
-#    from MyTable
-#    group by username
-#) tm on t.username = tm.username and t.date = tm.MaxDate
+# SELECT t.id, m.maxDate FROM topic t LEFT JOIN (SELECT topic_id, max(date_created) AS maxDate FROM message GROUP BY topic_id) m ON t.id = m.topic_id WHERE t.category_id = 1
 
-# SELECT t.name, t.id, account.username, account.id AS account_id, messages.maxDate AS latest FROM topic t, account LEFT JOIN (SELECT topic_id, max(date_created) AS maxDate FROM message GROUP BY topic_id) messages ON messages.topic_id = t.id WHERE category_id = 2 AND t.account_id = account.id ORDER BY latest DESC
+# SELECT t.topic_name, t.topic_id AS topic_id, t.username, t.topic_by_account AS account_id, m.maxDate AS latest FROM (SELECT topic.name AS topic_name, topic.id AS topic_id, account.id AS topic_by_account, account.username AS username FROM topic, account WHERE topic.account_id = account.id AND topic.category_id = 1) t LEFT JOIN (SELECT topic_id, max(date_created) AS maxDate FROM message GROUP BY topic_id) m ON t.topic_id = m.topic_id ORDER BY latest DESC
