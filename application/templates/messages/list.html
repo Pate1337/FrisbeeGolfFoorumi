@@ -1,14 +1,14 @@
 {% extends "layout.html" %}
 
 {% block body %}
-  <table class="table table-striped table-dark table-bordered table-hover">
+  <table class="table table-striped table-dark table-bordered table-hover" style="table-layout:fixed">
     <thead>
       <tr>
         <th scope="col">
           <div style="display:flex;justify-content:space-between;">
-            <div><a href="{{ url_for('categories_index') }}">Categories</a> / <a href="{{ url_for('topics_index', category_id=category.id) }}">{{ category.name }}</a> / {{ topic.name }}</div>
+            <div style="overflow-wrap:break-word;width:80%"><a href="{{ url_for('categories_index') }}">Categories</a> / <a href="{{ url_for('topics_index', category_id=category.id) }}">{{ category.name }}</a> / {{ topic.name }}</div>
             {% if current_user.is_authenticated %}
-            <div><a href="{{ url_for('messages_form', topic_id=topic.id) }}">Add a new message</a></div>
+            <div style="width:15%;overflow-wrap:break-word"><a href="{{ url_for('messages_form', topic_id=topic.id) }}">Add a new message</a></div>
             {% endif %}
           </div>
         </th>
