@@ -11,7 +11,7 @@ def topics_index(category_id):
     # Search the category by id
     c = Category.query.get(category_id)
     category_topics = Topic.find_topics_for_category_with_users(category_id)
-    # will be form { topic: { name: '', id: '' }, account: { username: '', id: '' } }
+    # will be form {"topic":{ "id": row[0], "name": row[1], "created": row[2], "creator_username": row[3], "creator_id": row[4] }, "latest_message": { "created": latest_message_created, "creator_username": latest_message_creator_username, "creator_id": latest_message_creator_id }}
     return render_template("topics/list.html", topics = category_topics, category = c)
 
 @app.route("/categories/<category_id>/topics/new/")

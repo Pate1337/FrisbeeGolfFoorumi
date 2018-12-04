@@ -4,24 +4,24 @@
   <table class="table table-striped table-dark table-bordered table-hover" style="table-layout:fixed">
     <thead>
       <tr>
-        <th scope="col" style="width:60%">
+        <th scope="col" style="width:70%">
           <div style="display:flex;justify-content:space-between;">
-            <div style="width:70%;overflow-wrap:break-word"><a style="color:white" href="{{ url_for('categories_index') }}">Categories</a> / {{ category.name }}</div>
+            <div style="width:70%;overflow-wrap:break-word"><a style="color:white" href="{{ url_for('categories_index') }}">Aihealueet</a> / {{ category.name }}</div>
             {% if current_user.is_authenticated %}
-            <div style="width:25%;overflow-wrap:break-word"><a href="{{ url_for('topics_form', category_id=category.id) }}">Add a new topic</a></div>
+            <div style="width:25%;overflow-wrap:break-word"><a href="{{ url_for('topics_form', category_id=category.id) }}">Aloita keskustelu</a></div>
             {% endif %}
           </div>
         </th>
-        <th scope="col" style="width:25%">Latest message</th>
-        <th scope="col" style="width:15%">Started by</th>
+        <th scope="col" style="width:15%">Viimeisin viesti</th>
+        <th scope="col" style="width:15%">Aloitettu</th>
       </tr>
     </thead>
     <tbody>
       {% for topic in topics %}
       <tr>
         <th scope="row" style="overflow-wrap:break-word;"><div><a href="{{ url_for('messages_index', topic_id=topic.topic.id) }}">{{ topic.topic.name }}</a></div></th>
-        <td style="overflow-wrap:break-word">{{ topic.topic.latest_message }}</td>
-        <td style="overflow-wrap:break-word;"><a href="{{ url_for('profile_show', account_id=topic.account.id) }}">{{ topic.account.username }}</a></td>
+        <td style="overflow-wrap:break-word;font-size:10px">{{ topic.latest_message.created }}<br /><a href="{{ url_for('profile_show', account_id=topic.latest_message.creator_id) }}">{{ topic.latest_message.creator_username }}</a></td>
+        <td style="overflow-wrap:break-word;font-size:10px">{{ topic.topic.created }}<br /><a href="{{ url_for('profile_show', account_id=topic.topic.creator_id) }}">{{ topic.topic.creator_username }}</a></td>
       </tr>
       {% endfor %}
     </tbody>

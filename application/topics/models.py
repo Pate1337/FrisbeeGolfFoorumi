@@ -16,35 +16,55 @@ class Topic(Base):
     
     @staticmethod
     def find_topics_for_category_with_users(category_id):
-        stmt = text("SELECT t.topic_name, t.topic_id AS topic_id, t.username, t.topic_by_account AS account_id, m.maxDate AS latest"
-                     " FROM (SELECT topic.name AS topic_name, topic.id AS topic_id, account.id AS topic_by_account, account.username AS username FROM topic, account WHERE topic.account_id = account.id AND topic.category_id = :category_id) t"
-                     " LEFT JOIN (SELECT topic_id, max(date_created) AS maxDate FROM message GROUP BY topic_id) m"
-                     " ON t.topic_id = m.topic_id"
-                     " ORDER BY CASE WHEN m.maxDate IS NULL THEN 1 ELSE 0 END, m.maxDate DESC").params(category_id = category_id)
-        #stmt = text("SELECT q.topic_name, q.topic_id, q.topic_creator_username, q.topic_creator_id, q.latest, q.latest_message_user_id, a.username"
-        #            " FROM (SELECT t.topic_name AS topic_name, t.topic_id AS topic_id, t.username AS topic_creator_username, t.topic_by_account AS topic_creator_id, m.maxDate AS latest, m.account_id AS latest_message_user_id FROM (SELECT topic.name AS topic_name, topic.id AS topic_id, account.id AS topic_by_account, account.username AS username FROM topic, account WHERE topic.account_id = account.id AND topic.category_id = :category_id) t"
-        #            " LEFT JOIN (SELECT account_id, topic_id, max(date_created) AS maxDate FROM message GROUP BY account_id, topic_id) m"
-        #            " ON t.topic_id = m.topic_id) q"
-        #            " LEFT JOIN account a ON a.id = q.latest_message_user_id"
-        #            " ORDER BY CASE WHEN q.latest IS NULL THEN 1 ELSE 0 END, q.latest DESC").params(category_id = category_id)
+        #stmt = text("SELECT t.topic_name, t.topic_id AS topic_id, t.username, t.topic_by_account AS account_id, m.maxDate AS latest"
+        #             " FROM (SELECT topic.name AS topic_name, topic.id AS topic_id, account.id AS topic_by_account, account.username AS username FROM topic, account WHERE topic.account_id = account.id AND topic.category_id = :category_id) t"
+        #             " LEFT JOIN (SELECT topic_id, max(date_created) AS maxDate FROM message GROUP BY topic_id) m"
+        #             " ON t.topic_id = m.topic_id"
+        #             " ORDER BY CASE WHEN m.maxDate IS NULL THEN 1 ELSE 0 END, m.maxDate DESC").params(category_id = category_id)
+        stmt = text("SELECT e.topic_id, e.topic_name, e.topic_date_created, e.topic_creator_username, e.topic_creator_id, t.latest_message, t.message_creator_username, t.message_creator_id"
+                    " FROM ("
+                    "SELECT t.id AS topic_id, t.name AS topic_name, t.date_created AS topic_date_created, a.username AS topic_creator_username, a.id AS topic_creator_id"
+                    " FROM topic t, account a"
+                    " WHERE t.category_id = :category_id AND a.id = t.account_id"
+                    ") e LEFT JOIN ("
+                    "SELECT m.topic_id AS topic_id, a.username AS message_creator_username, h.max AS latest_message, a.id AS message_creator_id"
+                    " FROM ("
+                    "SELECT topic_id, max(date_created) AS max FROM message GROUP BY topic_id"
+                    ") h, message m, account a"
+                    " WHERE m.topic_id = h.topic_id"
+                    " AND m.account_id = a.id"
+                    " AND h.max = m.date_created"
+                    ") t ON e.topic_id = t.topic_id"
+                    " ORDER BY CASE WHEN t.latest_message IS NULL THEN 1 ELSE 0 END, t.latest_message DESC").params(category_id = category_id)
         res = db.engine.execute(stmt)
 
         response = []
         for row in res:
-            latest_message = ''
-            if row[4]:
-                latest_message = row[4]
-            response.append({"topic":{ "name": row[0], "id": row[1], "latest_message": latest_message }, "account": { "username": row[2], "id": row[3] }})
+            latest_message_created = ''
+            latest_message_creator_username = ''
+            latest_message_creator_id = ''
+            if row[5]:
+                latest_message_created = row[5]
+                latest_message_creator_username = row[6]
+                latest_message_creator_id = row[7]
+            # response.append({"topic":{ "name": row[0], "id": row[1], "latest_message": latest_message }, "account": { "username": row[2], "id": row[3] }})
+            response.append({"topic":{ "id": row[0], "name": row[1], "created": row[2], "creator_username": row[3], "creator_id": row[4] }, "latest_message": { "created": latest_message_created, "creator_username": latest_message_creator_username, "creator_id": latest_message_creator_id }})
 
         return response
 
-# SELECT q.topic_name, q.topic_id, q.topic_creator_username, q.topic_creator_id, q.latest, q.latest_message_user_id, a.username
-#  FROM (SELECT t.topic_name AS topic_name, t.topic_id AS topic_id, t.username AS topic_creator_username, t.topic_by_account AS topic_creator_id, m.maxDate AS latest, m.account_id AS latest_message_user_id
-#  FROM (SELECT topic.name AS topic_name, topic.id AS topic_id, account.id AS topic_by_account, account.username AS username
-#  FROM topic, account WHERE topic.account_id = account.id AND topic.category_id = 2) t
-#  LEFT JOIN (SELECT account_id, topic_id, max(date_created) AS maxDate FROM message GROUP BY topic_id) m
-#  ON t.topic_id = m.topic_id AND m.account_id = t.latest_message_user_id) q
-#  LEFT JOIN account a ON a.id = q.latest_message_user_id
-#  ORDER BY CASE WHEN q.latest IS NULL THEN 1 ELSE 0 END, q.latest DESC
-
-# SELECT q.topic_name, q.topic_id, q.topic_creator_username, q.topic_creator_id, q.latest, q.latest_message_user_id, a.username FROM (SELECT t.topic_name AS topic_name, t.topic_id AS topic_id, t.username AS topic_creator_username, t.topic_by_account AS topic_creator_id, m.maxDate AS latest, m.account_id AS latest_message_user_id FROM (SELECT topic.name AS topic_name, topic.id AS topic_id, account.id AS topic_by_account, account.username AS username FROM topic, account WHERE topic.account_id = account.id AND topic.category_id = 1) t LEFT JOIN (SELECT account_id, topic_id, max(date_created) AS maxDate FROM message GROUP BY account_id, topic_id) m ON t.topic_id = m.topic_id) q LEFT JOIN account a ON a.id = q.latest_message_user_id ORDER BY CASE WHEN q.latest IS NULL THEN 1 ELSE 0 END, q.latest DESC
+# FINAL QUERY :DD
+# SELECT e.topic_id, e.topic_name, e.topic_date_created, e.topic_creator_username, e.topic_creator_id, t.latest_message, t.message_creator_username, t.message_creator_id
+#  FROM (
+# SELECT t.id AS topic_id, t.name AS topic_name, t.date_created AS topic_date_created, a.username AS topic_creator_username, a.id AS topic_creator_id
+#  FROM topic t, account a
+#  WHERE t.category_id = 2 AND a.id = t.account_id
+# ) e LEFT JOIN (
+# SELECT m.topic_id AS topic_id, a.username AS message_creator_username, h.max AS latest_message, a.id AS message_creator_id
+#  FROM (
+# SELECT topic_id, max(date_created) AS max FROM message GROUP BY topic_id
+# ) h, message m, account a
+#  WHERE m.topic_id = h.topic_id
+#  AND m.account_id = a.id
+#  AND h.max = m.date_created
+# ) t ON e.topic_id = t.topic_id
+#  ORDER BY CASE WHEN t.latest_message IS NULL THEN 1 ELSE 0 END, t.latest_message DESC;
