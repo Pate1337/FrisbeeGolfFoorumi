@@ -10,3 +10,4 @@ Päivämäärä | Tunnit | Kuvaus
 2.12.2018 | 5h | Viestitoiminnallisuus. Navigaatiota paranneltu. Poisteltu turhia tiedostoja (demo). Topicit ja viestit listattu uusimman viestin mukaan.
 3.12.2018 | 5h | Tietokantakyselyitä mietitty, jotta topiccien listaukseen saataisiin myös viimeisimmän viestin tiedot. Kirjautumis- ja rekisteröitymisnäkymät tyylitelty. Sovelluksen linkkejä tyylitelty.
 4.12.2018 | 3h | Vihdoinkin saatu aikaan tietokantakysely, joka palauttaa kaiken tarvittavan tiedon topic-listaukseen. Tekstejä muutettu suomenkielisiksi ympäri sovellusta.
+5.12.2018 | 4h | Topicit voi järjestää uusimman viestin tai luontipäivän mukaan. Topicin luonnin yhteydessä viestin lisäys.
