@@ -1,7 +1,7 @@
 from flask import redirect, render_template, request, url_for
-from flask_login import login_required, current_user
+from flask_login import current_user
 
-from application import app, db
+from application import app, db, login_required
 from application.messages.models import Message
 from application.topics.models import Topic
 from application.categories.models import Category
@@ -17,13 +17,13 @@ def messages_index(topic_id):
     # will be form { message: { message: '', id: '' }, account: { username: '', id: '' } }
     return render_template("messages/list.html", messages = topic_messages, topic = t, category = c)
 
-@app.route("/topics/<topic_id>/messages/new/")
-@login_required
+@app.route("/topics/<topic_id>/messages/new/", endpoint="message_creation", methods=["GET"])
+@login_required(role="ANY")
 def messages_form(topic_id):
     return render_template("messages/new.html", form = MessageForm(), topic_id=topic_id)
 
-@app.route("/topics/<topic_id>/messages/", methods=["POST"])
-@login_required
+@app.route("/topics/<topic_id>/messages", endpoint="add_new_message", methods=["POST"])
+@login_required(role="ANY")
 def messages_create(topic_id):
     form = MessageForm(request.form)
 

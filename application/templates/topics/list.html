@@ -8,7 +8,7 @@
           <div style="display:flex;justify-content:space-between;">
             <div style="width:70%;overflow-wrap:break-word"><a style="color:white" href="{{ url_for('categories_index') }}">Aihealueet</a> / {{ category.name }}</div>
             {% if current_user.is_authenticated %}
-            <div style="width:25%;overflow-wrap:break-word"><a href="{{ url_for('topics_form', category_id=category.id) }}">Aloita keskustelu</a></div>
+            <div style="width:25%;overflow-wrap:break-word"><a href="{{ url_for('topic_creation', category_id=category.id) }}">Aloita keskustelu</a></div>
             {% endif %}
           </div>
         </th>

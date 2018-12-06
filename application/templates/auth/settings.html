@@ -1,0 +1,108 @@
+{% extends "auth/formcontainer.html" %}
+
+{% block content %}
+
+<h3 style="margin-bottom:20px;text-align:center">Asetukset</h3>
+
+{% if error %}
+<div style="color:red;text-align:center">{{ error }}</div>
+{% endif %}
+
+<a style="margin-bottom:10px;margin-top:10px" class="btn btn-secondary" data-toggle="collapse" href="#collapseInfo" role="button" aria-expanded="false" aria-controls="collapseExample">
+  Muuta tietoja
+</a>
+<br />
+<div class="collapse" id="collapseInfo">
+  {{ name_error }}
+    <form method="POST" action="{{ url_for('profile_edit_main', account_id=user.id) }}">
+      <div class="form-group">
+        <div style="margin-bottom:5px">Käyttäjätunnus</div>
+        {{ form.username(type="text", class="form-control", id="username", placeholder="Username", value=user.username) }}
+        <ul>
+          {% for error in form.username.errors %}
+            <li><div>{{ error }}</div></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="form-group">
+        <div style="margin-bottom:5px">Nimi</div>
+        {{ form.name(type="text", class="form-control", id="name", placeholder="Name", value=user.name) }}
+        <ul>
+          {% for error in form.name.errors %}
+            <li><div>{{ error }}</div></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div style="display:flex;justify-content: flex-end;align-items: flex-end;width: 100%">
+        <button type="submit" class="btn btn-success">Tallenna muutokset</button>
+      </div>
+    </form>
+</div>
+
+<a style="margin-bottom:10px;margin-top:10px" class="btn btn-secondary" data-toggle="collapse" href="#collapsePassword" role="button" aria-expanded="false" aria-controls="collapseExample">
+  Vaihda salasana
+</a>
+<br />
+<div class="collapse" id="collapsePassword">
+  
+    {{ password_error }}
+    <form method="POST" action="{{ url_for('profile_change_password', account_id=user.id) }}">
+      <div class="form-group">
+        {{ password_form.old_password(type="password", class="form-control", id="password", placeholder="Nykyinen salasana") }}
+        <ul>
+          {% for error in password_form.old_password.errors %}
+            <li><div>{{ error }}</div></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="form-group">
+        {{ password_form.new_password(type="password", class="form-control", id="new_password", placeholder="Uusi salasana") }}
+        <ul>
+          {% for error in password_form.new_password.errors %}
+            <li><div>{{ error }}</div></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="form-group">
+        {{ password_form.confirm(type="password", class="form-control", id="confirm", placeholder="Uusi salasana uudelleen") }}
+        <ul>
+          {% for error in password_form.confirm.errors %}
+            <li><div>{{ error }}</div></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div style="display:flex;justify-content: flex-end;align-items: flex-end;width: 100%">
+        <button type="submit" class="btn btn-primary">Vaihda salasana</button>
+      </div>
+    </form>
+ 
+</div>
+
+<button style="margin-bottom:10px;margin-top:10px" type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+  Poista profiili
+</button>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Haluatko varmasti poistaa profiilisi?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Poistamalla profiilisi myös kaikki viestisi ja aloittamasi keskustelut poistetaan.<br /><br />
+        Toimintoa ei voi perua.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
+        <form method="POST" action="{{ url_for('profile_delete', account_id=user.id) }}">
+          <input type="submit" class="btn btn-danger" value="Poista profiili" />
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

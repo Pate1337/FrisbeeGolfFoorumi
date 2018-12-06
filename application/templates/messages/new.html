@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
   
 {% block body %}
-  <form method="POST" action="{{ url_for('messages_create', topic_id=topic_id) }}">
+  <form method="POST" action="{{ url_for('add_new_message', topic_id=topic_id) }}">
     <table>
       <tr>
 	      <td>

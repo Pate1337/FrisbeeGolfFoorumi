@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
   
 {% block body %}
-  <form method="POST" action="{{ url_for('topics_create', category_id=category_id) }}">
+  <form method="POST" action="{{ url_for('add_new_topic', category_id=category_id) }}">
     <table>
       <tr>
 	      <td>

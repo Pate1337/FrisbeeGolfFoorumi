@@ -10,6 +10,8 @@ class User(Base):
     password = db.Column(db.String(144), nullable=False)
     categories = db.relationship("Category", backref='account', lazy=True)
     topics = db.relationship("Topic", backref='topic', lazy=True)
+    messages = db.relationship("Message", backref='user_message', lazy=True)
+    roles = db.relationship("Role", backref="role", lazy=True)
 
     def __init__(self, name, username, password):
         self.name = name
@@ -27,3 +29,10 @@ class User(Base):
 
     def is_authenticated(self):
         return True
+    
+    def get_roles(self):
+        role_names = []
+        for r in self.roles:
+            role_names.append(r.name)
+        return role_names
+    

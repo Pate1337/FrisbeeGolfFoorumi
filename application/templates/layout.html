@@ -19,17 +19,26 @@
             <a class="nav-link" href="{{ url_for('categories_index') }}">Categories</a>
           </li>
           <li class="nav-item">
+            {% if current_user.is_authenticated and "ADMIN" in current_user.get_roles() %}
             <a class="nav-link" href="{{ url_for('categories_form') }}">Add a new category</a>
+            {% endif %}
           </li>
         </ul>
         <div class="form-inline mt-2 mt-md-0">
           <ul class="navbar-nav mr-auto">
             {% if current_user.is_authenticated %}
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('profile_show', account_id=current_user.id) }}">{{ current_user.name }}</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('auth_logout') }}">Kirjaudu ulos</a>
+                <div class="dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ current_user.username }}
+                  </a>
+                  
+                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="{{ url_for('profile_show', account_id=current_user.id) }}">Näytä profiili</a>
+                    <a class="dropdown-item" href="{{ url_for('profile_settings', account_id=current_user.id) }}">Asetukset</a>
+                    <a class="dropdown-item" href="{{ url_for('auth_logout') }}">Kirjaudu ulos</a>
+                  </div>
+                </div>
             </li>
             {% else %}
             <li class="nav-item">
