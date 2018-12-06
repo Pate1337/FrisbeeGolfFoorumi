@@ -12,8 +12,28 @@
             {% endif %}
           </div>
         </th>
-        <th scope="col" style="width:15%">Viimeisin viesti</th>
-        <th scope="col" style="width:15%">Aloitettu</th>
+        <th scope="col" style="width:15%">
+          <form id="latest-form-id" method="post" action="{{ url_for('topics_sort', category_id=category.id) }}">
+            <a href="#" onclick="document.getElementById('latest-form-id').submit()">Viimeisin viesti</a>
+            <input type="hidden" name="order_by" id="order_by" value="latest_message">
+            {% if order_by == "latest_message" and order == "desc" %}
+            <input type="hidden" name="order" id="order" value="asc">
+            {% else %}
+            <input type="hidden" name="order" id="order" value="desc">
+            {% endif %}
+            </form>
+        </th>
+        <th scope="col" style="width:15%">
+          <form id="created-form-id" method="post" action="{{ url_for('topics_sort', category_id=category.id) }}">
+              <a href="#" onclick="document.getElementById('created-form-id').submit()">Aloitettu</a>
+              <input type="hidden" name="order_by" id="order_by" value="created">
+              {% if order_by == "created" and order == "desc" %}
+              <input type="hidden" name="order" id="order" value="asc">
+              {% else %}
+              <input type="hidden" name="order" id="order" value="desc">
+              {% endif %}
+          </form>
+        </th>
       </tr>
     </thead>
     <tbody>

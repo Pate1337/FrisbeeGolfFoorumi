@@ -14,6 +14,23 @@
         </th>
       </tr>
     </thead>
+    {% if topic.description and topic.description != "" %}
+    <tbody>
+      <tr>
+        <td>
+          <div class="card bg-light" style="margin-bottom:10px">
+            <div class="card-header" style="display:flex;justify-content:space-between;">
+              <div style="color:black">Tekijän username</div>
+              <div style="color:black">{{ topic.date_created }}</div>
+            </div>
+            <div class="card-body">
+              <p class="card-text" style="color:black">{{ topic.description }}</p>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+    {% endif %}
   </table>
 
 
