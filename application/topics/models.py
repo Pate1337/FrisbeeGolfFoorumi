@@ -66,6 +66,19 @@ class Topic(Base):
                     ") t ON e.topic_id = t.topic_id"
                     + order_query).params(category_id = category_id)
         return main_text
+    
+    @staticmethod
+    def find_topic_with_creator_info(topic_id):
+        stmt = text("SELECT t.name, t.id, t.date_created, t.date_modified, t.description, t.category_id, a.id, a.username"
+                    " FROM topic t, account a WHERE t.id = :topic_id"
+                    " AND t.account_id = a.id").params(topic_id = topic_id)
+        res = db.engine.execute(stmt)
+
+        response = []
+        for row in res:
+            response.append({ "name": row[0], "id": row[1], "date_created": row[2], "date_modified": row[3], "description": row[4], "category_id": row[5], "account": {"id": row[6], "username": row[7]} })
+        
+        return response
 
 # FINAL QUERY :DD
 # SELECT e.topic_id, e.topic_name, e.topic_date_created, e.topic_creator_username, e.topic_creator_id, t.latest_message, t.message_creator_username, t.message_creator_id

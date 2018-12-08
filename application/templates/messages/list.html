@@ -6,7 +6,7 @@
       <tr>
         <th scope="col">
           <div style="display:flex;justify-content:space-between;">
-            <div style="overflow-wrap:break-word;width:80%"><a style="color:white" href="{{ url_for('categories_index') }}">Aihealueet</a> / <a style="color:white" href="{{ url_for('topics_index', category_id=category.id) }}">{{ category.name }}</a> / {{ topic.name }}</div>
+            <div style="overflow-wrap:break-word;width:80%"><a style="color:white" href="{{ url_for('categories_index') }}">Aihealueet</a> / <a style="color:white" href="{{ url_for('topics_index', category_id=category.id) }}">{{ category.name }}</a> /</div>
             {% if current_user.is_authenticated %}
             <div style="width:15%;overflow-wrap:break-word"><a href="{{ url_for('message_creation', topic_id=topic.id) }}">Uusi viesti</a></div>
             {% endif %}
@@ -14,23 +14,24 @@
         </th>
       </tr>
     </thead>
-    {% if topic.description and topic.description != "" %}
     <tbody>
       <tr>
         <td>
           <div class="card bg-light" style="margin-bottom:10px">
             <div class="card-header" style="display:flex;justify-content:space-between;">
-              <div style="color:black">Tekijän username</div>
+              <div><a href="{{ url_for('profile_show', account_id=topic.account.id) }}">{{ topic.account.username }}</a></div>
               <div style="color:black">{{ topic.date_created }}</div>
             </div>
             <div class="card-body">
+              <h4 style="color:black;margin-bottom:20px">{{ topic.name }}</h4>
+              {% if topic.description and topic.description != "" %}
               <p class="card-text" style="color:black">{{ topic.description }}</p>
+              {% endif %}
             </div>
           </div>
         </td>
       </tr>
     </tbody>
-    {% endif %}
   </table>
 
 

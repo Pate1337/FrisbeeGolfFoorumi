@@ -9,13 +9,12 @@ from application.messages.forms import MessageForm
 
 @app.route("/topics/<topic_id>/messages", methods=["GET"])
 def messages_index(topic_id):
-    # These could be done in one query
-    # Search the topic by id
-    t = Topic.query.get(topic_id)
-    c = Category.query.get(t.category_id)
+    t = Topic.find_topic_with_creator_info(topic_id)
+    # will be form [{ "name": '', "id": '', "date_created": row[2], "date_modified": row[3], "desription": row[4], "category_id": row[5], "account": {"id": row[6], "username": row[7]} }]
+    c = Category.query.get(t[0]["category_id"])
     topic_messages = Message.find_messages_for_topic_with_users(topic_id)
     # will be form { message: { message: '', id: '' }, account: { username: '', id: '' } }
-    return render_template("messages/list.html", messages = topic_messages, topic = t, category = c)
+    return render_template("messages/list.html", messages = topic_messages, topic = t[0], category = c)
 
 @app.route("/topics/<topic_id>/messages/new/", endpoint="message_creation", methods=["GET"])
 @login_required(role="ANY")
