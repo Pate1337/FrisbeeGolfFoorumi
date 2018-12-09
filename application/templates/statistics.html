@@ -1,0 +1,45 @@
+{% extends "auth/formcontainer.html" %}
+
+{% block content %}
+<h3 style="margin-bottom:40px">Statistiikka</h3>
+
+<div class="card bg-light">
+  <div class="card-header">
+    <h5>Käyttäjät ({{ users | length }})</h5>
+  </div>
+  <div class="card-body">
+      <table class="table table-striped table-dark table-bordered table-hover" style="table-layout:fixed">
+          <thead>
+            <tr>
+              <th scope="col" style="width:45%">Käyttäjätunnus</th>
+              <th scope="col" style="width:25%">Rooli</th>
+              <th scope="col" style="width:30%">Liittynyt</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for u in users %}
+          <tr>
+            <th scope="row" style="overflow-wrap:break-word">
+              <a href="{{ url_for('profile_show', account_id=u.id) }}">{{ u.username }}</a>
+              {% if current_user.is_authenticated and "ADMIN" in current_user.get_roles() %}
+              <form style="display:inline" method="POST" action="{{ url_for('profile_delete', account_id=u.id) }}">
+                <input style="font-size:10px;margin-left:5px" type="submit" class="btn btn-danger btn-sm" value="Poista" />
+              </form>
+              {% endif %}
+            </th>
+            <td>
+              {{ u.get_roles()[0] }}
+              {% if current_user.is_authenticated and "ADMIN" in current_user.get_roles() %}
+              <form style="display:inline" method="POST" action="{{ url_for('toggle_role', account_id=u.id) }}">
+                <input style="font-size:10px;margin-left:5px" type="submit" class="btn btn-primary btn-sm" value="Muuta roolia" />
+              </form>
+              {% endif %}
+            </td>
+            <td style="overflow-wrap:break-word">{{ u.date_created }}</td>
+          </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+  </div>
+</div>
+{% endblock %}

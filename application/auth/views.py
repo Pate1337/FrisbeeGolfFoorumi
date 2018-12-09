@@ -83,8 +83,9 @@ def profile_settings(account_id):
 @login_required(role="ANY")
 def profile_delete(account_id):
     # Tarkista että käyttäjän oma profiili
-    if str(current_user.id) != str(account_id):
-        return redirect(url_for('profile_settings', account_id = current_user.id))
+    if "ADMIN" not in current_user.get_roles():
+        if str(current_user.id) != str(account_id):
+            return redirect(url_for('profile_settings', account_id = current_user.id))
     
     # Hae user. Päivitä ennen jokaista jos tarve
     u = User.query.get(account_id)
@@ -171,3 +172,13 @@ def profile_change_password(account_id):
     db.session().commit()
 
     return redirect(url_for('profile_show', account_id=account_id))
+
+#@app.route("/search/<text>", methods=["GET"])
+#def search_from_everywhere(text):
+  # Search from messages
+  #query = text.lower()
+  #messages = Message.find_by_text(query)
+
+  # Search from Topics by name and description
+  # Search from Users by name or username
+  # Search from Categories by name or description

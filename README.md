@@ -31,7 +31,9 @@ python3 run.py
 
 3. Sovellus käynnistyy osoitteeseen localhost:5000
 
-Testikäyttäjätunnuksen käyttäjänimi on admin, salasana admin
+Sovelluksen ADMIN käyttäjän tunnus on admin, salasana admin
+
+Normaalikäyttäjän tunnus on kayttaja, salasana kayttaja (Voit myös luoda uuden käyttäjän, jonka rooli on perus käyttäjä).
 
 
 

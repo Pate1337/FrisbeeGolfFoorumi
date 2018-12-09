@@ -69,6 +69,7 @@ from application.auth import views
 from application.messages import models
 from application.messages import views
 from application.roles import models
+from application.roles import views
 
 from application.auth.models import User
 

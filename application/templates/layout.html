@@ -23,6 +23,11 @@
             <a class="nav-link" href="{{ url_for('categories_form') }}">Luo uusi aihealue</a>
             {% endif %}
           </li>
+          {% if current_user.is_authenticated and "ADMIN" in current_user.get_roles() %}
+          <li class="nav-item">
+            <a class="nav-link" href="{{ url_for('application_statistics') }}">Statistiikka</a>
+          </li>
+          {% endif %}
         </ul>
         <div class="form-inline mt-2 mt-md-0">
           <ul class="navbar-nav mr-auto">
