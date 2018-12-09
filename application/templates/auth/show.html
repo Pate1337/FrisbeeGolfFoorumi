@@ -1,10 +1,62 @@
 {% extends "auth/formcontainer.html" %}
 
 {% block content %}
-  <h3>
+  <h3 style="margin-bottom:40px">
     {{ user.username }}
     {% if "ADMIN" in user.get_roles()[0] %}
     <span style="margin-left:10px" class="badge badge-info">Admin</span>
     {% endif %}
+    <span style="font-size:14px">- Liittynyt: {{ user.date_created }}</span>
   </h3>
+  <div style="display:flex; justify-content:center;margin-bottom:40px">
+    <div class="card bg-secondary text-white" style="width:80%">
+      <div class="card-header bg-dark">
+        Aktiivisuus
+      </div>
+      <div class="card-body" style="display:flex;justify-content:space-between;margin-left:10%;margin-right:10%">
+        <div>Viestejä: {{ user.messages|length }}</div>
+        <div>Luotuja keskusteluja: {{ user.topics|length }}</div>
+        {% if "ADMIN" in user.get_roles()[0] %}
+        <div>
+          Luotuja aihealueita: {{ user.categories | length }}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  {% if latest_messages | length > 0 %}
+  <div style="margin-bottom:40px">
+    <h5 style="margin-bottom:20px">Viimeisimmät viestit</h5>
+    {% for m in latest_messages %}
+    <div class="card bg-light" style="margin-bottom:10px">
+        <div class="card-header" style="display:flex;justify-content:space-between;">
+          <div style="width:70%;overflow-wrap:break-word">
+            Keskusteluun <a href="{{ url_for('messages_index', topic_id=m.topic.id) }}">{{ m.topic.name }}</a>
+          </div>
+          {{ m.date_created }}
+          {% if m.date_created != m.date_modified %}
+          (muokattu: {{ m.date_modified }})
+          {% endif %}
+        </div>
+        <div class="card-body">
+          <p class="card-text" style="white-space:pre-wrap">{{ m.message }}</p>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if latest_topics | length > 0 %}
+  <div>
+    <h5 style="margin-bottom:20px">Viimeisimmät aloitetut keskustelut</h5>
+    <ul>
+      {% for t in latest_topics %}
+        <li>
+          <a href="{{ url_for('messages_index', topic_id=t.id) }}">{{ t.name }}</a> - Aloitettu {{ t.date_created }}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
 {% endblock %}

@@ -67,7 +67,9 @@ def auth_register():
 @app.route("/profile/<account_id>", methods = ["GET"])
 def profile_show(account_id):
     user = User.query.get(account_id)
-    return render_template("auth/show.html", user = user)
+    latest_messages = Message.find_ten_latest_messages_by_user_id(user.id)
+    latest_topics = Topic.find_ten_latest_topics_by_user_id(user.id)
+    return render_template("auth/show.html", user = user, latest_messages = latest_messages, latest_topics = latest_topics)
 
 @app.route("/profile/<account_id>/settings", methods = ["GET"])
 @login_required(role="ANY")

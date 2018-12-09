@@ -18,11 +18,6 @@ class Topic(Base):
     
     @staticmethod
     def find_topics_for_category_with_users(category_id, order_by, order):
-        #stmt = text("SELECT t.topic_name, t.topic_id AS topic_id, t.username, t.topic_by_account AS account_id, m.maxDate AS latest"
-        #             " FROM (SELECT topic.name AS topic_name, topic.id AS topic_id, account.id AS topic_by_account, account.username AS username FROM topic, account WHERE topic.account_id = account.id AND topic.category_id = :category_id) t"
-        #             " LEFT JOIN (SELECT topic_id, max(date_created) AS maxDate FROM message GROUP BY topic_id) m"
-        #             " ON t.topic_id = m.topic_id"
-        #             " ORDER BY CASE WHEN m.maxDate IS NULL THEN 1 ELSE 0 END, m.maxDate DESC").params(category_id = category_id)
         stmt = Topic.determine_query(category_id, order_by, order)
         res = db.engine.execute(stmt)
 
@@ -80,19 +75,17 @@ class Topic(Base):
         
         return response
 
-# FINAL QUERY :DD
-# SELECT e.topic_id, e.topic_name, e.topic_date_created, e.topic_creator_username, e.topic_creator_id, t.latest_message, t.message_creator_username, t.message_creator_id
-#  FROM (
-# SELECT t.id AS topic_id, t.name AS topic_name, t.date_created AS topic_date_created, a.username AS topic_creator_username, a.id AS topic_creator_id
-#  FROM topic t, account a
-#  WHERE t.category_id = 2 AND a.id = t.account_id
-# ) e LEFT JOIN (
-# SELECT m.topic_id AS topic_id, a.username AS message_creator_username, h.max AS latest_message, a.id AS message_creator_id
-#  FROM (
-# SELECT topic_id, max(date_created) AS max FROM message GROUP BY topic_id
-# ) h, message m, account a
-#  WHERE m.topic_id = h.topic_id
-#  AND m.account_id = a.id
-#  AND h.max = m.date_created
-# ) t ON e.topic_id = t.topic_id
-#  ORDER BY CASE WHEN t.latest_message IS NULL THEN 1 ELSE 0 END, t.latest_message DESC;
+    @staticmethod
+    def find_ten_latest_topics_by_user_id(user_id):
+        stmt = text("SELECT t.id, t.name, t.date_created"
+                    " FROM topic t"
+                    " WHERE t.account_id = :user_id"
+                    " ORDER BY t.date_created DESC"
+                    " LIMIT 10").params(user_id = user_id)
+        res = db.engine.execute(stmt)
+
+        response = []
+        for row in res:
+            response.append({ "id": row[0], "name": row[1], "date_created": row[2] })
+        
+        return response

@@ -24,3 +24,18 @@ class Message(Base):
         response.append({"message":{ "message": row[0], "id": row[1], "created": row[2], "edited": row[3] }, "account": { "username": row[4], "id": row[5] }})
 
     return response
+  
+  @staticmethod
+  def find_ten_latest_messages_by_user_id(user_id):
+    stmt = text("SELECT m.id, m.message, m.date_created, m.date_modified, t.id, t.name"
+                " FROM message m, topic t"
+                " WHERE m.account_id = :user_id"
+                " AND m.topic_id = t.id"
+                " ORDER BY m.date_created DESC LIMIT 10").params(user_id = user_id)
+
+    res = db.engine.execute(stmt)
+
+    response = []
+    for row in res:
+      response.append({ "id": row[0], "message": row[1], "date_created": row[2], "date_modified": row[3], "topic": { "id": row[4], "name": row[5] }})
+    return response
