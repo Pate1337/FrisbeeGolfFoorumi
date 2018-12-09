@@ -37,3 +37,45 @@ def messages_create(topic_id):
     db.session().commit()
 
     return redirect(url_for("messages_index", topic_id=topic_id))
+
+@app.route("/messages/<message_id>/delete", methods=["POST"])
+@login_required(role="ANY")
+def messages_delete(message_id):
+  m = Message.query.get(message_id)
+  topic_id = m.topic_id
+
+  if "ADMIN" not in current_user.get_roles():
+    if str(m.account_id) != str(current_user.id):
+      return redirect(url_for('messages_index', topic_id = topic_id))
+  
+  # if user is ADMIN or the creator of the message
+  db.session().delete(m)
+  db.session().commit()
+
+  return redirect(url_for('messages_index', topic_id = topic_id))
+
+@app.route("/messages/<message_id>/edit", methods=["GET", "POST"])
+@login_required(role="ANY")
+def messages_edit(message_id):
+  m = Message.query.get(message_id)
+  topic_id = m.topic_id
+
+  if str(m.account_id) != str(current_user.id):
+    return redirect(url_for('messages_index', topic_id = topic_id))
+  
+  if request.method == "GET":
+    form = MessageForm()
+    form.message.data = m.message
+    return render_template("messages/edit.html", form = form, message = m)
+  
+  # If POST
+  form = MessageForm(request.form)
+
+  if not form.validate():
+    return render_template("messages/edit.html", form = form, message = m)
+    
+  m.message = form.message.data
+
+  db.session().commit()
+
+  return redirect(url_for("messages_index", topic_id=topic_id))

@@ -1,5 +1,10 @@
 {% extends "auth/formcontainer.html" %}
 
 {% block content %}
-  <h3>{{ user.username }} - {{ user.get_roles()[0] }}</h3>
+  <h3>
+    {{ user.username }}
+    {% if "ADMIN" in user.get_roles()[0] %}
+    <span style="margin-left:10px" class="badge badge-info">Admin</span>
+    {% endif %}
+  </h3>
 {% endblock %}

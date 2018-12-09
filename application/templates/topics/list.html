@@ -39,44 +39,19 @@
     <tbody>
       {% for topic in topics %}
       <tr>
-        <th scope="row" style="overflow-wrap:break-word;">
+        <th scope="row" style="overflow-wrap:break-word">
           <div>
             <a href="{{ url_for('messages_index', topic_id=topic.topic.id) }}">{{ topic.topic.name }}</a>
             {% if current_user.is_authenticated and "ADMIN" in current_user.get_roles() %}
-            <span style="font-size:10px">
-              <button style="margin-left:5px" type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal">
-                <div style="font-size:10px">Poista</div>
-              </button>
-            </span>
+            <form style="display:inline" method="GET" action="{{ url_for('confirm_topics_delete_from_topics', topic_id=topic.topic.id) }}">
+              <input style="font-size:10px;margin-left:5px" type="submit" class="btn btn-danger btn-sm" value="Poista" data-toggle="modal" data-target="#deleteModal" />
+            </form>
             {% endif %}
           </div>
         </th>
         <td style="overflow-wrap:break-word;font-size:10px">{{ topic.latest_message.created }}<br /><a href="{{ url_for('profile_show', account_id=topic.latest_message.creator_id) }}">{{ topic.latest_message.creator_username }}</a></td>
         <td style="overflow-wrap:break-word;font-size:10px">{{ topic.topic.created }}<br /><a href="{{ url_for('profile_show', account_id=topic.topic.creator_id) }}">{{ topic.topic.creator_username }}</a></td>
       </tr>
-
-      <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Haluatko varmasti poistaa keskustelun?</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                Poistamalla keskustelun myös kaikki sen viestit poistetaan.<br /><br />
-                Toimintoa ei voi perua.
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
-                <form method="POST" action="{{ url_for('topics_delete', topic_id=topic.topic.id) }}">
-                  <input type="submit" class="btn btn-danger" value="Poista keskustelu" />
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
       {% endfor %}
     </tbody>
   </table>

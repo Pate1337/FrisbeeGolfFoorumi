@@ -1,0 +1,25 @@
+{% extends "auth/formcontainer.html" %}
+
+{% block content %}
+<h3 style="margin-bottom:20px">Muokkaa keskustelua</h3>
+{{ error }}
+<form method="POST" action="{{ url_for('topics_edit', topic_id=topic.id) }}">
+  <div class="form-group">
+    {{ form.name(type="text", class="form-control", id="name", placeholder="Keskustelun otsikko") }}
+    <ul>
+      {% for error in form.name.errors %}
+        <li><div>{{ error }}</div></li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="form-group">
+    {{ form.description(type="text", class="form-control", id="description", placeholder="Viesti", rows=6) }}
+    <ul>
+      {% for error in form.description.errors %}
+        <li><div>{{ error }}</div></li>
+      {% endfor %}
+    </ul>
+  </div>
+  <button type="submit" class="btn btn-dark">Muokkaa</button>
+</form>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="false">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div style="width:90%;overflow-wrap: break-word" class="modal-title" id="exampleModalLabel">
+          <h5>
+            Haluatko varmasti poistaa aihealueen<br />
+           - {{ category.name }}
+           </h5>
+        </div>
+        <a class="close" aria-label="Close" href="{{ url_for('categories_index') }}">
+          <span aria-hidden="true">&times;</span>
+        </a>
+      </div>
+      <div class="modal-body">
+        Poistamalla aihealueen, myös kaikki sen keskustelut ja niiden viestit poistetaan.<br /><br />
+        Toimintoa ei voi perua.
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-secondary" href="{{ url_for('categories_index') }}">Peruuta</a>
+        <form method="POST" action="{{ url_for('categories_delete', category_id=category.id) }}">
+          <input type="submit" class="btn btn-danger" value="Poista aihealue" />
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

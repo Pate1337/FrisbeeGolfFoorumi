@@ -22,7 +22,12 @@
               <div>
                 <a href="{{ url_for('profile_show', account_id=topic.account.id) }}">{{ topic.account.username }}</a>
               </div>
-              <div style="color:black">{{ topic.date_created }}</div>
+              <div style="color:black">
+                {{ topic.date_created }}
+                {% if topic.date_modified != topic.date_created %}
+                (muokattu: {{ topic.date_modified }})
+                {% endif %}
+              </div>
             </div>
             <div class="card-body">
               <h4 style="color:black;margin-bottom:20px">{{ topic.name }}</h4>
@@ -30,6 +35,20 @@
               <p class="card-text" style="color:black;white-space:pre-wrap">{{ topic.description }}</p>
               {% endif %}
             </div>
+            {% if current_user.is_authenticated and ("ADMIN" in current_user.get_roles() or topic.account.id == current_user.id) %}
+            <div class="card-footer" style="display:flex;justify-content:center">
+              {% if topic.account.id == current_user.id %}
+              <div style="margin-right:10px">
+                <a href="{{ url_for('topics_edit', topic_id=topic.id) }}" style="font-size:10px" class="btn btn-secondary btn-sm">Muokkaa</a>
+              </div>
+              {% endif %}
+              {% if "ADMIN" in current_user.get_roles() %}
+              <div>
+                <a href="{{ url_for('confirm_topics_delete_from_messages', topic_id=topic.id) }}" style="font-size:10px" class="btn btn-danger btn-sm">Poista keskustelu</a>
+              </div>
+              {% endif %}
+            </div>
+            {% endif %}
           </div>
         </td>
       </tr>
@@ -44,10 +63,27 @@
         <a href="{{ url_for('profile_show', account_id=message.account.id) }}">{{ message.account.username }}</a>
       </div>
       {{ message.message.created }}
+      {% if message.message.created != message.message.edited %}
+      (muokattu: {{ message.message.edited }})
+      {% endif %}
     </div>
     <div class="card-body">
       <p class="card-text" style="white-space:pre-wrap">{{ message.message.message }}</p>
     </div>
+    {% if current_user.is_authenticated and ("ADMIN" in current_user.get_roles() or message.account.id == current_user.id) %}
+    <div class="card-footer" style="display:flex;justify-content:center">
+      {% if message.account.id == current_user.id %}
+      <div style="margin-right:10px">
+        <a href="{{ url_for('messages_edit', message_id=message.message.id) }}" style="font-size:10px" class="btn btn-secondary btn-sm">Muokkaa</a>
+      </div>
+      {% endif %}
+      <div>
+        <form method="POST" action="{{ url_for('messages_delete', message_id=message.message.id) }}">
+          <input type="submit" style="font-size:10px" class="btn btn-danger btn-sm" value="Poista" />
+        </form>
+      </div>
+    </div>
+    {% endif %}
   </div>
   {% endfor %}
 {% endblock %}

@@ -11,7 +11,14 @@
     <tbody>
     {% for category in categories %}
     <tr>
-      <th scope="row" style="overflow-wrap:break-word"><a href="{{ url_for('topics_index', category_id=category.id) }}">{{ category.name }}</a></td>
+      <th scope="row" style="overflow-wrap:break-word">
+        <a href="{{ url_for('topics_index', category_id=category.id) }}">{{ category.name }}</a>
+        {% if current_user.is_authenticated and "ADMIN" in current_user.get_roles() %}
+        <form style="display:inline" method="GET" action="{{ url_for('confirm_categories_delete', category_id=category.id) }}">
+          <input style="font-size:10px;margin-left:5px" type="submit" class="btn btn-danger btn-sm" value="Poista" />
+        </form>
+        {% endif %}
+      </th>
       <td style="overflow-wrap:break-word">{{ category.description }}</td>
     </tr>
     {% endfor %}

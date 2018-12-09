@@ -1,0 +1,17 @@
+{% extends "auth/formcontainer.html" %}
+
+{% block content %}
+<h3 style="margin-bottom:20px">Muokkaa viestiä</h3>
+{{ error }}
+<form method="POST" action="{{ url_for('messages_edit', message_id=message.id) }}">
+  <div class="form-group">
+    {{ form.message(type="text", class="form-control", id="message", rows=6) }}
+    <ul>
+      {% for error in form.message.errors %}
+        <li><div>{{ error }}</div></li>
+      {% endfor %}
+    </ul>
+  </div>
+  <button type="submit" class="btn btn-dark">Muokkaa</button>
+</form>
+{% endblock %}
