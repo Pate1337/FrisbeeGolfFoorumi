@@ -1,5 +1,5 @@
-{% extends "layout.html" %}
+{% extends "auth/formcontainer.html" %}
 
-{% block body %}
+{% block content %}
   <h3>{{ user.username }} - {{ user.get_roles()[0] }}</h3>
 {% endblock %}

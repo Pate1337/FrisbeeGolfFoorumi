@@ -2,25 +2,25 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Disc golf forum</title>
+    <title>Frisbee golf foorumi</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/styles.css') }}">
   </head>
 
   <body class="bg-secondary">
     <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-      <a class="navbar-brand" href="{{ url_for('categories_index') }}">Disc golf forum</a>
+      <a class="navbar-brand" href="{{ url_for('categories_index') }}">Frisbee golf foorumi</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('categories_index') }}">Categories</a>
+            <a class="nav-link" href="{{ url_for('categories_index') }}">Aihealueet</a>
           </li>
           <li class="nav-item">
             {% if current_user.is_authenticated and "ADMIN" in current_user.get_roles() %}
-            <a class="nav-link" href="{{ url_for('categories_form') }}">Add a new category</a>
+            <a class="nav-link" href="{{ url_for('categories_form') }}">Luo uusi aihealue</a>
             {% endif %}
           </li>
         </ul>

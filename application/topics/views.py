@@ -36,7 +36,7 @@ def topics_create(category_id):
     db.session().add(t)
     db.session().commit()
 
-    return redirect(url_for("topics_index", category_id=category_id))
+    return redirect(url_for("messages_index", topic_id=t.id))
 
 @app.route("/categories/<category_id>/topics/", methods=["POST"])
 def topics_sort(category_id):
@@ -48,3 +48,24 @@ def topics_sort(category_id):
 
   category_topics = Topic.find_topics_for_category_with_users(category_id, order_by, order)
   return render_template("topics/list.html", topics = category_topics, category = c, order_by = order_by, order = order)
+
+@app.route("/topics/<topic_id>/delete", methods=["POST"])
+@login_required(role="ANY")
+def topics_delete(topic_id):
+  t = Topic.query.get(topic_id)
+  category_id = t.category_id
+  if "ADMIN" not in current_user.get_roles():
+    # If not admin, check that the topic is current_user's
+    if str(t.account_id) != str(current_user.id):
+      return redirect(url_for('topics_index', category_id=category_id))
+  
+  # If current user is ADMIN OR topic is current_user's own
+  # Poista kaikki topicin viestit
+  for m in t.messages:
+    db.session().delete(m)
+  
+  # Delete topic
+  db.session().delete(t)
+  db.session().commit()
+
+  return redirect(url_for('topics_index', category_id=category_id))

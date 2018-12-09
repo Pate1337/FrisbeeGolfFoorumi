@@ -70,7 +70,7 @@ def profile_show(account_id):
     return render_template("auth/show.html", user = user)
 
 @app.route("/profile/<account_id>/settings", methods = ["GET"])
-#@login_required
+@login_required(role="ANY")
 def profile_settings(account_id):
     # Jos käyttäjä syöttää urliin toisen profiilin id:n, redirect oikeeseen (ei väliä oikeesti)
     if str(current_user.id) != str(account_id):
@@ -78,7 +78,7 @@ def profile_settings(account_id):
     return render_template("auth/settings.html", user = current_user, form = UserInfoForm(), password_form = ChangePassword())
 
 @app.route("/profile/<account_id>/delete", methods = ["POST"])
-#@login_required
+@login_required(role="ANY")
 def profile_delete(account_id):
     # Tarkista että käyttäjän oma profiili
     if str(current_user.id) != str(account_id):
@@ -126,7 +126,7 @@ def profile_delete(account_id):
     return redirect(url_for('categories_index'))
 
 @app.route("/profile/<account_id>/edit", methods = ["POST"])
-#@login_required
+@login_required(role="ANY")
 def profile_edit_main(account_id):
 
     # Tarkista että käyttäjän oma profiili
@@ -147,7 +147,7 @@ def profile_edit_main(account_id):
     return redirect(url_for('profile_show', account_id=account_id))
 
 @app.route("/profile/<account_id>/change_password", methods = ["POST"])
-#@login_required
+@login_required(role="ANY")
 def profile_change_password(account_id):
 
     # Tarkista että käyttäjän oma profiili

@@ -14,9 +14,9 @@ class Message(Base):
   
   @staticmethod
   def find_messages_for_topic_with_users(topic_id):
-    stmt = text("SELECT message.message, message.id AS message_id, message.date_created, account.username, account.id AS account_id FROM message, account"
-                     " WHERE (topic_id = :topic_id AND message.account_id = account.id)"
-                     " ORDER BY message.date_created DESC").params(topic_id = topic_id)
+    stmt = text("SELECT m.message, m.id, m.date_created, a.username, a.id FROM message m, account a"
+                     " WHERE (m.topic_id = :topic_id AND m.account_id = a.id)"
+                     " ORDER BY m.date_created DESC").params(topic_id = topic_id)
     res = db.engine.execute(stmt)
 
     response = []

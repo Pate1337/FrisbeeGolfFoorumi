@@ -1,36 +1,25 @@
-{% extends "layout.html" %}
+{% extends "auth/formcontainer.html" %}
   
-{% block body %}
-  <form method="POST" action="{{ url_for('categories_create') }}">
-    <table>
-      <tr>
-	      <td>
-	        {{ form.name.label }}
-	      </td>
-	      <td>
-	        {{ form.name }}
-        </td>
-        <td>
-          <ul>
-            {% for error in form.name.errors %}
-            <li>{{ error }}</li>
-            {% endfor %}
-          </ul>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          {{ form.description.label }}
-        </td>
-        <td>
-          {{ form.description }}
-        </td>
-        <td></td>
-      </tr>
-      <tr>
-	      <td colspan="3">
-	        <input type="submit" value="Add a new category"/>
-	      </td>
-      </tr>
-  </form>
+{% block content %}
+<h3 style="margin-bottom:20px">Uusi aihealue</h3>
+{{ error }}
+<form method="POST" action="{{ url_for('categories_create') }}">
+  <div class="form-group">
+    {{ form.name(type="text", class="form-control", id="name", placeholder="Kategorian nimi") }}
+    <ul>
+      {% for error in form.name.errors %}
+        <li><div>{{ error }}</div></li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="form-group">
+    {{ form.description(type="text", class="form-control", id="description", placeholder="Kuvaus") }}
+    <ul>
+      {% for error in form.description.errors %}
+        <li><div>{{ error }}</div></li>
+      {% endfor %}
+    </ul>
+  </div>
+  <button type="submit" class="btn btn-dark">Luo aihealue</button>
+</form>
 {% endblock %}

@@ -10,7 +10,7 @@ class Topic(Base):
                            nullable=False)
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
     messages = db.relationship("Message", backref='topic_message', lazy=True)
-    description = db.Column(db.String(5000), nullable=False)
+    description = db.Column(db.String(5000))
 
     def __init__(self, name, description = ""):
         self.name = name
