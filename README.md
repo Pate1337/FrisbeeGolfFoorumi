@@ -18,18 +18,39 @@ Omien kokemusten ja suoritusten jakaminen on myös sallittua sivulla.
 
 ## Sovelluksen suorittaminen paikallisesti
 
-Suorita seuraavat askeleet sovelluksen juurihakemistossa:
-1. Aktivoi virtuaalinen Python-ympäristö komennolla
+Suorita seuraavat askeleet järjestyksessä:
+
+1. Kloonaa repositoria komennolla
+```
+git clone https://github.com/Pate1337/FrisbeeGolfFoorumi.git
+```
+
+2. Mene hakemistoon demo
+```
+cd demo
+```
+
+3. Luo virtuaaliympäristö
+```
+python3 -m venv venv
+```
+
+4. Aktivoi virtuaalinen Python-ympäristö komennolla
 ```
 source venv/bin/activate
 ```
 
-2. Käynnistä ohjelma komennolla
+5. Lataa sovelluksen riippuvuudet
+```
+pip install -r requirements.txt
+```
+
+6. Käynnistä ohjelma komennolla
 ```
 python3 run.py
 ```
 
-3. Sovellus käynnistyy osoitteeseen localhost:5000
+7. Sovellus käynnistyy osoitteeseen localhost:5000
 
 Sovelluksen ADMIN käyttäjän tunnus on admin, salasana admin
 

@@ -33,6 +33,7 @@ def categories_create():
 @app.route("/categories/<category_id>/delete", methods=["POST"])
 @login_required(role="ADMIN")
 def categories_delete(category_id):
+  print("Poistetaan kategoria id: " + category_id)
   c = Category.query.get(category_id)
 
   for t in c.topics:
@@ -45,10 +46,3 @@ def categories_delete(category_id):
   db.session().commit()
 
   return redirect(url_for('categories_index'))
-
-@app.route("/categories/<category_id>/delete/confirm", methods=["GET"])
-@login_required(role="ADMIN")
-def confirm_categories_delete(category_id):
-  c = Category.query.get(category_id)
-  
-  return render_template("categories/confirm_delete.html", category=c)

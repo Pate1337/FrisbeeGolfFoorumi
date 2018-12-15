@@ -78,7 +78,7 @@
  
 </div>
 
-<button style="margin-bottom:10px;margin-top:10px" type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+<button style="margin-bottom:10px;margin-top:10px" type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal" data-user="{{ user.id }}">
   Poista profiili
 </button>
 
@@ -105,4 +105,22 @@
   </div>
 </div>
 
+{% block scripts %}
+  <script>
+    $(document).ready(function() {
+      $('#exampleModal').on('show.bs.modal', function (event) {
+        console.log('Vitu jes')
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var recipient = button.data('user') // Extract info from data-* attributes
+        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+        console.log('user_id: ' + recipient)
+        // var modal = $(this)
+        // modal.find('.modal-title').text('Javascripti on jännää')
+        // modal.find('.modal-body input').val(recipient)
+      });
+      console.log('Moi')
+    });
+  </script>
+{% endblock %}
 {% endblock %}

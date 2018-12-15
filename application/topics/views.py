@@ -70,32 +70,6 @@ def topics_delete(topic_id):
 
   return redirect(url_for('topics_index', category_id=category_id))
 
-@app.route("/topics/<topic_id>/delete/confirm", methods=["GET"])
-@login_required(role="ANY")
-def confirm_topics_delete_from_topics(topic_id):
-  t = Topic.query.get(topic_id)
-
-  category_id = t.category_id
-  if "ADMIN" not in current_user.get_roles():
-    # If not admin, check that the topic is current_user's
-    if str(t.account_id) != str(current_user.id):
-      return redirect(url_for('topics_index', category_id=category_id))
-  
-  return render_template("topics/confirm_delete.html", topic=t, from_where="listing")
-
-@app.route("/topics/<topic_id>/delete/confirm/", methods=["GET"])
-@login_required(role="ANY")
-def confirm_topics_delete_from_messages(topic_id):
-  t = Topic.query.get(topic_id)
-
-  category_id = t.category_id
-  if "ADMIN" not in current_user.get_roles():
-    # If not admin, check that the topic is current_user's
-    if str(t.account_id) != str(current_user.id):
-      return redirect(url_for('topics_index', category_id=category_id))
-  
-  return render_template("topics/confirm_delete.html", topic=t, from_where="messages")
-
 @app.route("/topics/<topic_id>/edit", methods=["GET", "POST"])
 @login_required(role="ANY")
 def topics_edit(topic_id):

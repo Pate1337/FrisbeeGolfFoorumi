@@ -43,9 +43,9 @@
               </div>
               {% endif %}
               {% if "ADMIN" in current_user.get_roles() %}
-              <div>
-                <a href="{{ url_for('confirm_topics_delete_from_messages', topic_id=topic.id) }}" style="font-size:10px" class="btn btn-danger btn-sm">Poista keskustelu</a>
-              </div>
+              <button style="font-size:10px" type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteTopicModal" data-topic_id="{{ topic.id }}" data-topic_name="{{ topic.name }}">
+                Poista keskustelu
+              </button>
               {% endif %}
             </div>
             {% endif %}
@@ -78,12 +78,87 @@
       </div>
       {% endif %}
       <div>
-        <form method="POST" action="{{ url_for('messages_delete', message_id=message.message.id) }}">
-          <input type="submit" style="font-size:10px" class="btn btn-danger btn-sm" value="Poista" />
-        </form>
+        <button style="font-size:10px" type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteMessageModal" data-message_id="{{ message.message.id }}">
+          Poista
+        </button>
       </div>
     </div>
     {% endif %}
   </div>
   {% endfor %}
+
+  <div class="modal fade" id="deleteTopicModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Haluatko varmasti poistaa keskustelun?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" style="overflow-wrap:break-word">
+            <span id="topic_name" style="font-weight:bold;color:blue"></span><br /><br />
+            Poistamalla keskustelun, myös kaikki sen viestit poistetaan.<br /><br />
+            Toimintoa ei voi perua.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
+            <form id="deleteForm" method="POST" action="#">
+              <input type="submit" class="btn btn-danger" value="Poista keskustelu" />
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="deleteMessageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Haluatko varmasti poistaa viestin?</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body" style="overflow-wrap:break-word">
+              Toimintoa ei voi perua.
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
+              <form id="deleteForm" method="POST" action="#">
+                <input type="submit" class="btn btn-danger" value="Poista viesti" />
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+  {% block scripts %}
+    <script>
+      $(document).ready(function() {
+        $('#deleteTopicModal').on('show.bs.modal', function (event) {
+          var button = $(event.relatedTarget) // Button that triggered the modal
+          var topic_id = button.data('topic_id') // Extract info from data-* attributes
+          // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+          // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+          var topic_name = button.data('topic_name')
+          var url = "/topics/" + topic_id + "/delete"
+          var modal = $(this)
+          modal.find('#deleteForm').attr("action", url)
+          modal.find('#topic_name').text(topic_name)
+        });
+
+        $('#deleteMessageModal').on('show.bs.modal', function (event) {
+          var button = $(event.relatedTarget) // Button that triggered the modal
+          var message_id = button.data('message_id') // Extract info from data-* attributes
+          // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+          // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+          var url = "/messages/" + message_id + "/delete"
+          var modal = $(this)
+          modal.find('#deleteForm').attr("action", url)
+        });
+      });
+    </script>
+  {% endblock %}
+  
 {% endblock %}

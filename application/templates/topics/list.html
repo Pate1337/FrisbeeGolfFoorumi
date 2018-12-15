@@ -43,9 +43,9 @@
           <div>
             <a href="{{ url_for('messages_index', topic_id=topic.topic.id) }}">{{ topic.topic.name }}</a>
             {% if current_user.is_authenticated and "ADMIN" in current_user.get_roles() %}
-            <form style="display:inline" method="GET" action="{{ url_for('confirm_topics_delete_from_topics', topic_id=topic.topic.id) }}">
-              <input style="font-size:10px;margin-left:5px" type="submit" class="btn btn-danger btn-sm" value="Poista" data-toggle="modal" data-target="#deleteModal" />
-            </form>
+            <button style="font-size:10px" type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteTopicModal" data-topic_id="{{ topic.topic.id }}" data-topic_name="{{ topic.topic.name }}">
+              Poista
+            </button>
             {% endif %}
           </div>
         </th>
@@ -55,4 +55,46 @@
       {% endfor %}
     </tbody>
   </table>
+
+  <div class="modal fade" id="deleteTopicModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Haluatko varmasti poistaa keskustelun?</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body" style="overflow-wrap:break-word">
+            <span id="topic_name" style="font-weight:bold;color:blue"></span><br /><br />
+            Poistamalla keskustelun, myös kaikki sen viestit poistetaan.<br /><br />
+            Toimintoa ei voi perua.
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
+            <form id="deleteForm" method="POST" action="#">
+              <input type="submit" class="btn btn-danger" value="Poista keskustelu" />
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  {% block scripts %}
+    <script>
+      $(document).ready(function() {
+        $('#deleteTopicModal').on('show.bs.modal', function (event) {
+          var button = $(event.relatedTarget) // Button that triggered the modal
+          var topic_id = button.data('topic_id') // Extract info from data-* attributes
+          // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+          // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+          var topic_name = button.data('topic_name')
+          var url = "/topics/" + topic_id + "/delete"
+          var modal = $(this)
+          modal.find('#deleteForm').attr("action", url)
+          modal.find('#topic_name').text(topic_name)
+        });
+      });
+    </script>
+  {% endblock %}  
 {% endblock %}

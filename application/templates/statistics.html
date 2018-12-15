@@ -22,14 +22,14 @@
             <th scope="row" style="overflow-wrap:break-word">
               <a href="{{ url_for('profile_show', account_id=u.id) }}">{{ u.username }}</a>
               {% if current_user.is_authenticated and "ADMIN" in current_user.get_roles() %}
-              <form style="display:inline" method="POST" action="{{ url_for('profile_delete', account_id=u.id) }}">
-                <input style="font-size:10px;margin-left:5px" type="submit" class="btn btn-danger btn-sm" value="Poista" />
-              </form>
+              <button style="font-size:10px" type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteUserModal" data-account_id="{{ u.id }}" data-account_username="{{ u.username }}">
+                Poista
+              </button>
               {% endif %}
             </th>
             <td>
               {{ u.get_roles()[0] }}
-              {% if current_user.is_authenticated and "ADMIN" in current_user.get_roles() %}
+              {% if current_user.is_authenticated and "ADMIN" in current_user.get_roles() and u.id != current_user.id %}
               <form style="display:inline" method="POST" action="{{ url_for('toggle_role', account_id=u.id) }}">
                 <input style="font-size:10px;margin-left:5px" type="submit" class="btn btn-primary btn-sm" value="Muuta roolia" />
               </form>
@@ -42,4 +42,47 @@
         </table>
   </div>
 </div>
+
+<div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Haluatko varmasti poistaa käyttäjän?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" style="overflow-wrap:break-word">
+          <span id="account_username" style="font-weight:bold;color:blue"></span><br /><br />
+          Poistamalla käyttäjän myös kaikki käyttäjän viestit ja keskustelut poistetaan.<br /><br />
+          Toimintoa ei voi perua.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Peruuta</button>
+          <form id="deleteForm" method="POST" action="#">
+            <input type="submit" class="btn btn-danger" value="Poista käyttäjä" />
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% block scripts %}
+    <script>
+      $(document).ready(function() {
+        $('#deleteUserModal').on('show.bs.modal', function (event) {
+          var button = $(event.relatedTarget) // Button that triggered the modal
+          var account_id = button.data('account_id') // Extract info from data-* attributes
+          // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+          // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+          var account_name = button.data('account_username')
+          var url = "/profile/" + account_id + "/delete"
+          var modal = $(this)
+          modal.find('#deleteForm').attr("action", url)
+          modal.find('#account_username').text(account_name)
+        });
+      });
+    </script>
+  {% endblock %} 
+
 {% endblock %}
