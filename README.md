@@ -25,9 +25,9 @@ Suorita seuraavat askeleet järjestyksessä:
 git clone https://github.com/Pate1337/FrisbeeGolfFoorumi.git
 ```
 
-2. Mene hakemistoon demo
+2. Mene hakemistoon FrisbeeGolfFoorumi
 ```
-cd demo
+cd FrisbeeGolfFoorumi
 ```
 
 3. Luo virtuaaliympäristö
