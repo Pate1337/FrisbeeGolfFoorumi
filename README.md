@@ -18,6 +18,8 @@ Omien kokemusten ja suoritusten jakaminen on myös sallittua sivulla.
 
 [User stories](https://github.com/Pate1337/FrisbeeGolfFoorumi/blob/master/documentation/userstories.md)
 
+[Kehitysideoita](https://github.com/Pate1337/FrisbeeGolfFoorumi/blob/master/documentation/kehitys.md)
+
 ## Sovelluksen suorittaminen paikallisesti
 
 Suorita seuraavat askeleet järjestyksessä:
