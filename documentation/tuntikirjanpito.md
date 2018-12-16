@@ -14,4 +14,5 @@ Päivämäärä | Tunnit | Kuvaus
 6.12.2018 | 8h | Autorisointi toimii nyt lokaalisti. Käyttäjän poistaminen toteutettu. Käyttäjän asetus-sivu luotu. 
 9.12.2018 | 12h | Topiccien, kategorioiden ja viestien poisto toteutettu. Käyttäjäprofiili. Admin toimintoja.
 10.12.2018 | 4h | Hoidettu vahvistus Modalit käyttäen javascriptiä.
-15.12.2018 | 1h | Päivitetty sovelluken README
+15.12.2018 | 1h | Päivitetty sovelluken README.
+16.12.2018 | 6h | Lisätty hakutoiminnallisuus. Sovelluksesta voi nyt hakea aihealueita, käyttäjiä, keskusteluita tai viestejä.
