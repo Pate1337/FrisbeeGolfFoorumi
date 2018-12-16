@@ -24,6 +24,8 @@ As an admin, I can change the role for a user, so that I can give admin rights t
 
 As an admin, I can delete any user account.
 
+As a user, I can search for everything in the site by typing text in the search field.
+
 ### Will be implemented in the future
 
 As a user, I can create groups, so that I can invite friends and add topics to that group only.
