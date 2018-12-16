@@ -10,9 +10,19 @@ As a user, I can select a topic I am interested in, so that I can write a messag
 
 As a user, I can view other user's profiles, so that I can see their activity on the site.
 
+As a user, I can edit and delete my messages.
+
+As a user, I can edit and delete my profile.
+
+As a user, I can sort the topics, so that I can see the topics with the latest messages or the one's that are created most recently.
+
 As an admin, I can add new categories.
 
 As an admin, I can delete categories, topics and messages.
+
+As an admin, I can change the role for a user, so that I can give admin rights to a user.
+
+As an admin, I can delete any user account.
 
 ### Will be implemented in the future
 

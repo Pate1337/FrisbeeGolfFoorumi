@@ -172,13 +172,3 @@ def profile_change_password(account_id):
     db.session().commit()
 
     return redirect(url_for('profile_show', account_id=account_id))
-
-#@app.route("/search/<text>", methods=["GET"])
-#def search_from_everywhere(text):
-  # Search from messages
-  #query = text.lower()
-  #messages = Message.find_by_text(query)
-
-  # Search from Topics by name and description
-  # Search from Users by name or username
-  # Search from Categories by name or description

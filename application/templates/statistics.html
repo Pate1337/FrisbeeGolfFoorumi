@@ -28,7 +28,7 @@
               {% endif %}
             </th>
             <td>
-              {{ u.get_roles()[0] }}
+              {{ u.role.name }}
               {% if current_user.is_authenticated and "ADMIN" in current_user.get_roles() and u.id != current_user.id %}
               <form style="display:inline" method="POST" action="{{ url_for('toggle_role', account_id=u.id) }}">
                 <input style="font-size:10px;margin-left:5px" type="submit" class="btn btn-primary btn-sm" value="Muuta roolia" />

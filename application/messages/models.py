@@ -39,3 +39,18 @@ class Message(Base):
     for row in res:
       response.append({ "id": row[0], "message": row[1], "date_created": row[2], "date_modified": row[3], "topic": { "id": row[4], "name": row[5] }})
     return response
+  
+  @staticmethod
+  def find_by_given_text(search_query):
+    like_string = "%" + search_query + "%"
+    stmt = text("SELECT m.id, m.date_created, m.date_modified, m.message, a.id, a.username, t.id, t.name FROM message m, account a, topic t"
+                " WHERE m.message LIKE :like_string"
+                " AND a.id = m.account_id"
+                " AND t.id = m.topic_id")
+
+    res = db.engine.execute(stmt, like_string=like_string)
+
+    response = []
+    for row in res:
+      response.append({ "id": row[0], "date_created": row[1], "date_modified": row[2], "message": row[3], "account": { "id": row[4], "username": row[5] }, "topic": { "id": row[6], "name": row[7] } })
+    return response

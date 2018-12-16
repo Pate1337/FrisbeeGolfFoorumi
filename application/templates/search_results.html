@@ -1,0 +1,78 @@
+{% extends "auth/formcontainer.html" %}
+
+{% block content %}
+<h3 style="margin-bottom:20px">Hakutulokset haulle "{{ text }}"</h3>
+
+{% if categories | length > 0 %}
+<h5 style="margin-top:20px">Aihealueet ({{ categories | length }})</h5>
+<ul>
+  {% for c in categories %}
+  <li>
+    <a href="{{ url_for('topics_index', category_id=c.id) }}">{{ c.name }}</a>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+{% if users | length > 0 %}
+<h5 style="margin-top:20px">Käyttäjät ({{ users | length }})</h5>
+<ul>
+  {% for u in users %}
+  <li>
+    <a href="{{ url_for('profile_show', account_id=u.id) }}">{{ u.username }}</a>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+{% if topics | length > 0 %}
+<h5 style="margin-top:20px">Keskustelut ({{ topics | length }})</h5>
+{% endif %}
+{% for t in topics %}
+<div class="card bg-light" style="margin-bottom:10px">
+    <div class="card-header" style="display:flex;justify-content:space-between;">
+      <div>
+        <a href="{{ url_for('profile_show', account_id=t.account.id) }}">{{ t.account.username }}</a>
+      </div>
+      <div style="color:black">
+        {{ t.date_created }}
+        {% if t.date_modified != t.date_created %}
+        (muokattu: {{ t.date_modified }})
+        {% endif %}
+      </div>
+    </div>
+    <div class="card-body">
+      <h4 style="color:black;margin-bottom:20px"><a href="{{ url_for('messages_index', topic_id=t.id) }}">{{ t.name }}</a></h4>
+      {% if t.description and t.description != "" %}
+      <p class="card-text" style="color:black;white-space:pre-wrap">{{ t.description }}</p>
+      {% endif %}
+    </div>
+  </div>
+{% endfor %}
+
+{% if messages | length > 0 %}
+<h5 style="margin-top:20px">Viestit ({{ messages | length }})</h5>
+{% endif %}
+{% for m in messages %}
+<div class="card bg-light" style="margin-bottom:10px">
+  <div class="card-header" style="display:flex;justify-content:space-between;">
+    <div>
+      <a href="{{ url_for('profile_show', account_id=m.account.id) }}">{{ m.account.username }}</a>
+    </div>
+    {{ m.date_created }}
+    {% if m.date_created != m.date_modified %}
+    (muokattu: {{ m.date_modified }})
+    {% endif %}
+  </div>
+  <div class="card-body">
+    <p class="card-text" style="white-space:pre-wrap">{{ m.message }}</p>
+  </div>
+  <div class="card-footer">
+    <div style="width:100%;overflow-wrap:break-word">
+      Keskusteluun <a href="{{ url_for('messages_index', topic_id=m.topic.id) }}">{{ m.topic.name }}</a>
+    </div>
+  </div>
+</div>
+{% endfor %}
+
+{% endblock %}

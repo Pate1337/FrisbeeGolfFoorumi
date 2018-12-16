@@ -5,7 +5,25 @@
     <title>Frisbee golf foorumi</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles/styles.css') }}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        $('#search').on('keydown', function (event) {
+          // var button = $(event.relatedTarget)
+          // var topic_id = button.data('topic_id')
+          // var topic_name = button.data('topic_name')
+          // var url = "/topics/" + topic_id + "/delete"
+          // var modal = $(this)
+          // modal.find('#deleteForm').attr("action", url)
+          // modal.find('#topic_name').text(topic_name)
+          if(event.keyCode == 13 && $(this).val() != '') {
+            var form = $('#searchForm');
+            form.attr("action", "/search/" + $(this).val());
+            form.submit();
+          }
+        });
+      });
+    </script>
   </head>
 
   <body class="bg-secondary">
@@ -32,6 +50,11 @@
         </ul>
         <div class="form-inline mt-2 mt-md-0">
           <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <form method="GET" action="" id="searchForm">
+                <input id="search" class="form-control" type="text" placeholder="Etsi sivulta"></input>
+              </form>
+            </li>
             {% if current_user.is_authenticated %}
             <li class="nav-item">
                 <div class="dropdown">

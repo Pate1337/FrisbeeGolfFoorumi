@@ -15,6 +15,21 @@ def hello():
 @app.route("/application/statistics", methods=["GET"])
 @login_required(role="ADMIN")
 def application_statistics():
-  users = User.query.all()
+  users = User.find_users_with_roles()
   return render_template('statistics.html', users = users)
+
+@app.route("/search/<text>", methods=["GET"])
+def search_from_everywhere(text):
+
+  query = text.lower()
+
+  messages = Message.find_by_given_text(query)
+
+  topics = Topic.find_by_given_text(query)
+
+  users = User.find_by_given_text(query)
+
+  categories = Category.find_by_given_text(query)
+
+  return render_template('search_results.html', text = text, messages = messages, topics = topics, users = users, categories = categories)
 

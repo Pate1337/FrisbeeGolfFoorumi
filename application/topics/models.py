@@ -89,3 +89,18 @@ class Topic(Base):
             response.append({ "id": row[0], "name": row[1], "date_created": row[2] })
         
         return response
+    
+    @staticmethod
+    def find_by_given_text(search_query):
+        like_string = "%" + search_query + "%"
+        stmt = text("SELECT t.id, t.date_created, t.date_modified, t.name, t.description, a.id, a.username"
+                    " FROM topic t, account a"
+                    " WHERE (t.name LIKE :like_string OR t.description LIKE :like_string)"
+                    " AND t.account_id = a.id")
+
+        res = db.engine.execute(stmt, like_string=like_string)
+
+        response = []
+        for row in res:
+            response.append({ "id": row[0], "date_created": row[1], "date_modified": row[2], "name": row[3], "description": row[4], "account": { "id": row[5], "username": row[6] } })
+        return response
