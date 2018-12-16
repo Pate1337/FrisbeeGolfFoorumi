@@ -6,3 +6,5 @@
 - Mahdollisuus muiden käyttäjien viestien vastaamiseen
 
 Tarvittavat tietokantamuutokset näyttäisivät seuraavalta:
+
+<img src="https://raw.githubusercontent.com/Pate1337/FrisbeeGolfFoorumi/master/documentation/images/TulevaisuudenTietokantakaavio.png" width="750">
